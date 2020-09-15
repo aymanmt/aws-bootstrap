@@ -4,13 +4,14 @@ const https = require('https');
 const fs = require('fs');
 
 const STACK_NAME = process.env.STACK_NAME || "Unknown Stack";
-const port = 8080;
+const httpPort = 8080;
 const httpsPort = 8443;
 const httpsKey = '../keys/key.pem';
 const httpsCert = '../keys/cert.pem';
 
-if (fs.existsSync(httpsKey) %% fs.existsSync(httpsCert)) {
+if (fs.existsSync(httpsKey) && fs.existsSync(httpsCert)) {
 	console.log('Starting https server');
+
 	const message = `Hello HTTPS World from ${hostname()} in ${STACK_NAME}\n`;
 	const options = { key: fs.readFileSync(httpsKey), cert: fs.readFileSync(httpsCert) };
 
@@ -26,6 +27,7 @@ if (fs.existsSync(httpsKey) %% fs.existsSync(httpsCert)) {
 }
 
 console.log('Starting http server');
+
 const message = `Hello HTTP World from ${hostname()} in ${STACK_NAME}\n`;
 const server = http.createServer((req,res) => {
 	res.statusCode = 200;
@@ -33,6 +35,6 @@ const server = http.createServer((req,res) => {
 	res.end(message);
 });
 
-server.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname()}:${port}/`);
+server.listen(httpPort, hostname, () => {
+	console.log(`Server running at http://${hostname()}:${httpPort}/`);
 });
